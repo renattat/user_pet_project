@@ -1,23 +1,11 @@
 package ru.userpetproject.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.userpetproject.entity.User;
-import ru.userpetproject.repository.UserRepository;
+import ru.userpetproject.dto.UserReq;
+import ru.userpetproject.dto.UserResp;
 
-import java.util.Optional;
+public interface UserService {
 
-@Service
-public class UserService {
+    UserResp get(long id);
 
-    @Autowired
-    UserRepository userRepository;
-
-    public Optional<User> getUser(long id) {
-        return userRepository.findById(id);
-    }
-
-    public User addNewUser(User user){
-        return userRepository.save(user);
-    }
+    UserResp create(UserReq userReq);
 }

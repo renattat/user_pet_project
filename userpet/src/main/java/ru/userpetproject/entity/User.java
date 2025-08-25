@@ -1,11 +1,20 @@
 package ru.userpetproject.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
+@Data
+// поменять на lombok               +
+// добавить новую сущность Email    +
+// добавить List<Email>             +
+// доавить entityGraph
+// добавить новую сущность Phone    +
+// добавить List<Phone>             +
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,48 +23,24 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String email;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Email> emails;
 
-    public Long getId() {
-        return id;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Phone> phones;
+
+    public void addEmail(Email email) {
+        if(emails == null) {
+            emails = new ArrayList<>();
+        }
+        emails.add(email);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + Objects.hashCode(name);
-        result = 31 * result + Objects.hashCode(email);
-        return result;
+    public void addPhone(Phone phone) {
+        if(phones == null) {
+            phones = new ArrayList<>();
+        }
+        phones.add(phone);
     }
 }
+

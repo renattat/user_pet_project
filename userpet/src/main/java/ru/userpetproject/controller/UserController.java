@@ -1,31 +1,27 @@
 package ru.userpetproject.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.userpetproject.entity.User;
-import ru.userpetproject.service.UserService;
-
-import java.util.Optional;
+import ru.userpetproject.dto.UserReq;
+import ru.userpetproject.dto.UserResp;
+import ru.userpetproject.service.UserServiceImpl;
 
 @RestController
+@RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserServiceImpl userService;
 
-
-    @GetMapping("/users/{id}")
-    public User getUser(@PathVariable long id) {
-        Optional<User> user = userService.getUser(id);
-        if (user.isEmpty()) {
-            throw new RuntimeException("В БД нет пользователя с id = " + id);
-        }
-        return user.get();
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResp> get(@PathVariable long id) {
+        return new ResponseEntity<>(userService.get(id), HttpStatus.OK);
     }
 
-    @PostMapping("/users")
-    public User addNewUser(@RequestBody User user) {
-        User savedUser = userService.addNewUser(user);
-        return savedUser;
+    @PostMapping()
+    public ResponseEntity<UserResp> create(@RequestBody UserReq userReq) {
+        return  new ResponseEntity<>(userService.create(userReq), HttpStatus.CREATED);
     }
 }
