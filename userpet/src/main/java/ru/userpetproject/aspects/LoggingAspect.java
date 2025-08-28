@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.userpetproject.dto.UserReq;
+import ru.userpetproject.dto.user.UserReq;
 
 @Aspect
 @Component
@@ -19,7 +19,7 @@ public class LoggingAspect {
         log.info("beforeGetUserAdvice: попытка получить пользователя c id = {}", jointPoint.getArgs()[0]);
     }
 
-    @Before("execution(public * ru.userpetproject.controller.UserController.create(ru.userpetproject.dto.UserReq))")
+    @Before("execution(public * ru.userpetproject.controller.UserController.create(ru.userpetproject.dto.user.UserReq))")
     public void beforePostUserAdvice(JoinPoint jointPoint) {
         var userReq = (UserReq) jointPoint.getArgs()[0];
         log.info("beforePostUserAdvice: попытка создать пользователя : \nname: {} \nemails: {} \nphones: {}",

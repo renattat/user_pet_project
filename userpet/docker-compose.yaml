@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  my-postgres:
+    image: postgres
+    networks:
+      - my-network
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+
+  my-pgadmin:
+    image: dpage/pgadmin4
+    networks:
+      - my-network
+    ports:
+      - 8081:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=renat@mail.ru
+      - PGADMIN_DEFAULT_PASSWORD=password
+    depends_on:
+      - my-postgres
+
+
+networks:
+  my-network:

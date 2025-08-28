@@ -1,7 +1,7 @@
 package ru.userpetproject.service;
 
-import ru.userpetproject.dto.UserReq;
-import ru.userpetproject.dto.UserResp;
+import ru.userpetproject.dto.user.UserReq;
+import ru.userpetproject.dto.user.UserResp;
 
 public interface UserService {
 
