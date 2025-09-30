@@ -3,6 +3,7 @@ package ru.userpetproject.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.userpetproject.enums.UserStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
-// поменять на lombok               +
-// добавить новую сущность Email    +
-// добавить List<Email>             +
-// доавить entityGraph              +
-// добавить новую сущность Phone    +
-// добавить List<Phone>             +
 @NamedEntityGraph(
         name = "User.emails_and_phones",
         attributeNodes = {
@@ -30,29 +25,42 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<Email> emails;
+    private List<Email> emails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<Phone> phones;
+    private List<Phone> phones = new ArrayList<>();
 
-    public void addEmail(Email email) {
-        if (emails == null) {
-            emails = new ArrayList<>();
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
+    public void setEmails(List<Email> emails) {
+        if (emails != null) {
+            emails.forEach(this::setEmail);
         }
-        emails.add(email);
-        email.setUser(this);
     }
 
-    public void addPhone(Phone phone) {
-        if (phones == null) {
-            phones = new ArrayList<>();
+    public void setPhones(List<Phone> phones) {
+        if (phones != null) {
+            phones.forEach(this::setPhone);
         }
-        phones.add(phone);
-        phone.setUser(this);
     }
 
+    public void setEmail(Email email) {
+        if (email != null) {
+            emails.add(email);
+            email.setUser(this);
+        }
+    }
+
+    public void setPhone(Phone phone) {
+        if (phone != null) {
+            phones.add(phone);
+            phone.setUser(this);
+        }
+    }
 }
 
